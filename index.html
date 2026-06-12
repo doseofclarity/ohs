@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Occupational Health and Safety Nursing | CHN White Book | OHNAP · DOH Program</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        .transition-all { transition: all 0.3s ease; }
+        .recall-mode .reveal-text {
+            background-color: #cbd5e1;
+            color: transparent;
+            border-radius: 0.375rem;
+            padding: 0 0.25rem;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            box-shadow: inset 0 0 0 1px #94a3b8;
+        }
+        .recall-mode .reveal-text:hover,
+        .recall-mode .reveal-text.revealed {
+            background-color: #fde047;
+            color: #1e293b;
+            box-shadow: none;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #1e40af; border-radius: 8px; }
+        .content-section { animation: fade 0.3s ease; }
+        @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .locked-section { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+        .quiz-feedback-correct { background-color: #dcfce7; border-left: 4px solid #22c55e; }
+        .quiz-feedback-wrong { background-color: #fee2e2; border-left: 4px solid #ef4444; }
+        .nav-btn i.fa-lock, .nav-btn i.fa-unlock-alt { width: 1.5rem; display: inline-block; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; vertical-align: top; }
+        th { background-color: #f1f5f9; }
+    </style>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { ohn: { light: '#dbeafe', DEFAULT: '#1e40af', dark: '#1e3a8a' } } } } }
+    </script>
+</head>
+<body class="bg-slate-50 h-screen flex flex-col md:flex-row font-sans text-slate-800 overflow-hidden">
+
+    <!-- Mobile header -->
+    <div class="md:hidden bg-ohn-dark text-white p-4 flex justify-between items-center shadow-md z-30 shrink-0">
+        <button onclick="toggleMobileMenu()" class="text-white focus:outline-none z-40"><i class="fa-solid fa-bars text-2xl"></i></button>
+        <h1 class="font-bold text-lg absolute left-1/2 transform -translate-x-1/2 pointer-events-none"><i class="fa-solid fa-hard-hat mr-2"></i>OH Nursing</h1>
+        <div class="w-8"></div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <nav id="sidebar" class="hidden md:flex flex-col w-full md:w-80 bg-white shadow-2xl h-full absolute md:relative z-30 transition-transform duration-300 shrink-0 border-r border-slate-200">
+        <div class="p-6 bg-gradient-to-br from-ohn-dark to-ohn text-white hidden md:block shrink-0">
+            <h1 class="font-black text-2xl tracking-wide"><i class="fa-solid fa-hard-hat mr-2"></i> Occupational Health & Safety Nursing</h1>
+            <p class="text-sm text-slate-300 mt-1">OHN · DOH Program · Workplace Hazards · PHN Role</p>
+        </div>
+        <div class="flex-1 overflow-y-auto py-4">
+            <ul class="space-y-1 text-sm font-medium">
+                <li><button onclick="showSection('home')" id="btn-home" class="nav-btn w-full text-left px-6 py-3 bg-ohn-light text-ohn-dark border-r-4 border-ohn-dark"><i class="fa-solid fa-house w-6 nav-icon"></i><i class="fa-solid fa-lock w-6 hidden"></i> Start / Overview</button></li>
+                <li><button onclick="showSection('definition')" id="btn-definition" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 locked-section"><i class="fa-solid fa-book-open w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6"></i> Definition & Scope</button></li>
+                <li><button onclick="showSection('functions')" id="btn-functions" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 locked-section"><i class="fa-solid fa-list-check w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6"></i> Functions of OHN (PD 856)</button></li>
+                <li><button onclick="showSection('hazards')" id="btn-hazards" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 locked-section"><i class="fa-solid fa-skull-crossbones w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6"></i> Workplace Hazards (5 Categories)</button></li>
+                <li><button onclick="showSection('prevention')" id="btn-prevention" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 locked-section"><i class="fa-solid fa-shield-haltered w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6"></i> Levels of Prevention & Program Components</button></li>
+                <li><button onclick="showSection('legal')" id="btn-legal" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 locked-section"><i class="fa-solid fa-gavel w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6"></i> Legal Bases & Workers' Compensation</button></li>
+                <li><button onclick="showSection('phn_role')" id="btn-phn_role" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 locked-section"><i class="fa-solid fa-user-nurse w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6"></i> PHN as Occupational Health Nurse</button></li>
+                <li><button onclick="showSection('mnemonics')" id="btn-mnemonics" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 border-t mt-2 locked-section"><i class="fa-solid fa-brain w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6"></i> Mnemonics & Recap</button></li>
+                <li><button onclick="showSection('final_quiz_sec')" id="btn-final_quiz_sec" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 locked-section"><i class="fa-solid fa-graduation-cap w-6 text-amber-500 nav-icon hidden"></i><i class="fa-solid fa-lock w-6"></i> Final 50‑Item Exam</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="flex-1 h-full overflow-y-auto bg-slate-100 relative w-full">
+        <div class="fixed top-16 md:top-4 right-4 md:right-8 z-40 flex items-center bg-white/90 backdrop-blur px-4 py-3 rounded-full shadow-lg border border-slate-200 cursor-pointer hover:bg-slate-50" onclick="toggleRecallMode()">
+            <span class="mr-3 text-sm font-bold text-slate-700 hidden md:inline"><i class="fa-solid fa-brain text-ohn mr-1"></i> Active Recall</span>
+            <span class="mr-3 text-sm font-bold text-slate-700 md:hidden"><i class="fa-solid fa-brain text-ohn"></i></span>
+            <button id="recall-toggle" class="w-12 h-6 bg-slate-300 rounded-full relative transition-colors duration-300 pointer-events-none"><div id="recall-knob" class="w-5 h-5 bg-white rounded-full absolute top-0.5 left-0.5 transition-transform duration-300 shadow"></div></button>
+        </div>
+
+        <div class="p-4 md:p-8 max-w-6xl mx-auto pb-32">
+            <!-- HOME SECTION -->
+            <section id="home" class="content-section flex flex-col items-center justify-center min-h-[80vh] text-center block">
+                <div class="bg-gradient-to-br from-slate-800 to-ohn-dark text-white rounded-3xl shadow-2xl p-10 md:p-16 w-full">
+                    <div class="relative z-10">
+                        <div class="bg-white/10 inline-block p-4 rounded-full mb-6"><i class="fa-solid fa-hard-hat text-5xl"></i></div>
+                        <h3 class="text-xl font-bold text-slate-300 mb-2 uppercase">DOH · EOHO · OHNAP</h3>
+                        <h1 class="text-4xl md:text-6xl font-black mb-6">Occupational Health & Safety Nursing</h1>
+                        <div class="bg-white/10 inline-block px-6 py-3 rounded-full mb-10"><p class="text-lg">“Promotion, protection, and restoration of workers’ health”</p></div>
+                        <button onclick="unlockFirstSection()" class="bg-slate-600 hover:bg-slate-500 text-white font-black py-4 px-10 rounded-full shadow-xl text-lg flex items-center mx-auto">Begin Lecture <i class="fa-solid fa-arrow-right ml-3"></i></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 1: Definition & Scope -->
+            <section id="definition" class="content-section hidden"><div class="bg-white rounded-2xl shadow-lg p-6 md:p-8"><h2 class="text-3xl font-black mb-6 border-b-2 border-ohn pb-3"><i class="fa-solid fa-book-open text-ohn mr-4"></i> Definition & Scope of Occupational Health Nursing</h2><div class="grid md:grid-cols-2 gap-6"><div><ul class="list-disc pl-5 space-y-2"><li><span class="reveal-text">Occupational Health Nursing</span> – specialty practice that provides and delivers health care services to workers and worker populations.</li><li>Focus: <span class="reveal-text">promotion, protection, and restoration</span> of workers’ health within a safe work environment.</li><li>Autonomous practice requiring independent decisions and creative solutions.</li><li>Integrates public health theory and principles.</li></ul></div><div><div class="bg-ohn-light p-4 rounded-xl"><p class="font-bold">Public health perspective:</p><p>Workers spend 1/4 to 1/3 of their lives at work. The PHN can act as an occupational health nurse to assess health needs of the working population and design healthful interventions.</p></div></div></div><button onclick="openQuiz('definition')" class="mt-8 w-full bg-ohn text-white font-black py-4 rounded-xl">📖 Take Quiz (10 items) to Unlock Next Section</button></div></section>
+
+            <!-- SECTION 2: Functions of OHN (based on PD 856) -->
+            <section id="functions" class="content-section hidden"><div class="bg-white rounded-2xl shadow-lg p-6 md:p-8"><h2 class="text-3xl font-black mb-6 border-b-2 border-ohn pb-3"><i class="fa-solid fa-list-check text-ohn mr-4"></i> Functions of Occupational Health Nurse (PD 856, Sanitation Code)</h2><ul class="list-disc pl-5 space-y-2"><li>Lead sanitary & industrial hygiene inspections in workplaces.</li><li>Recommend issuance/suspension/revocation of business permits based on sanitation compliance.</li><li>Coordinate with government agencies on IRR implementation.</li><li>Attend complaints related to industrial hygiene; recommend corrective measures.</li><li>Provide, install, and maintain control facilities and protective barriers.</li><li>Inform workers about hazards and reasons for control measures.</li><li>Conduct periodic health examinations related to worker exposure.</li><li>Implement control measures to reduce noise, dust, and other hazards.</li><li>Ensure proper use and maintenance of Personal Protective Equipment (PPE).</li><li>Provide occupational health services and facilities for employees.</li><li>Elevate unresolved issues to higher authority.</li><li>Prepare and submit yearly reports to Local and National Government.</li></ul><button onclick="openQuiz('functions')" class="mt-8 w-full bg-ohn text-white font-black py-4 rounded-xl">📋 Take Quiz (10 items) to Unlock Next Section</button></div></section>
+
+            <!-- SECTION 3: Workplace Hazards (5 Categories) -->
+            <section id="hazards" class="content-section hidden"><div class="bg-white rounded-2xl shadow-lg p-6 md:p-8"><h2 class="text-3xl font-black mb-6 border-b-2 border-ohn pb-3"><i class="fa-solid fa-skull-crossbones text-ohn mr-4"></i> Workplace Hazards – 5 Categories</h2><div class="grid md:grid-cols-2 gap-4"><div class="border p-3 rounded"><i class="fa-solid fa-radiation"></i> <strong>Physical</strong><br>Radiation, noise, temperature extremes, vibration, electric/magnetic fields. Acute: heat stroke, burns. Chronic: hearing loss, cancer.</div><div class="border p-3 rounded"><i class="fa-solid fa-flask"></i> <strong>Chemical</strong><br>Solvents, pesticides, metals, gases, medications. Acute: irritation, chemical burns. Chronic: asthma, cancer, neurological disorders.</div><div class="border p-3 rounded"><i class="fa-solid fa-virus"></i> <strong>Biological</strong><br>Viruses, bacteria, fungi, parasites (healthcare, lab, animal workers). Acute: flu, measles. Chronic: TB, HIV, HepB.</div><div class="border p-3 rounded"><i class="fa-solid fa-grip-lines"></i> <strong>Mechanical / Ergonomic</strong><br>Repetitive motion, poor workstation design, local vibration. Acute: strain. Chronic: carpal tunnel, back injury.</div><div class="border p-3 rounded"><i class="fa-solid fa-brain"></i> <strong>Psychosocial</strong><br>Interpersonal conflict, shift work, sexual harassment, role conflict. Acute: fatigue, depression. Chronic: hypertension, alcoholism, mental illness.</div></div><div class="bg-amber-50 p-3 mt-4 rounded-lg"><p class="font-bold">OHN role: Anticipate, recognize, evaluate, and control hazards through surveillance, training, and engineering controls.</p></div><button onclick="openQuiz('hazards')" class="mt-8 w-full bg-ohn text-white font-black py-4 rounded-xl">⚠️ Take Quiz (10 items) to Unlock Next Section</button></div></section>
+
+            <!-- SECTION 4: Levels of Prevention & Program Components -->
+            <section id="prevention" class="content-section hidden"><div class="bg-white rounded-2xl shadow-lg p-6 md:p-8"><h2 class="text-3xl font-black mb-6 border-b-2 border-ohn pb-3"><i class="fa-solid fa-shield-haltered text-ohn mr-4"></i> Levels of Prevention & Essential OHN Components</h2><div class="grid md:grid-cols-3 gap-4"><div class="border p-3 rounded"><strong>Primary Prevention</strong><br>Pre‑employment exams, health education, PPE, engineering controls, vaccination.</div><div class="border p-3 rounded"><strong>Secondary Prevention</strong><br>Screening & monitoring (audiometry, spirometry, lead levels), early detection, treatment.</div><div class="border p-3 rounded"><strong>Tertiary Prevention</strong><br>Rehabilitation, job modification, return‑to‑work programs, chronic pain management.</div></div><div class="mt-4"><p class="font-bold">Essential components of OHN practice:</p><ul class="list-disc pl-5"><li>Health promotion & prevention (primary, secondary, tertiary)</li><li>Worker & workplace hazard assessment / surveillance</li><li>Injury & illness investigation, analysis, prevention</li><li>Primary care (treatment, follow‑up, emergency)</li><li>Case management (coordinate care, cost‑effective)</li><li>Counseling (stress, lifestyle, psychosocial issues)</li><li>Management & administration</li><li>Legal/ethical monitoring</li><li>Research</li><li>Community orientation & resource linkage</li></ul></div><button onclick="openQuiz('prevention')" class="mt-8 w-full bg-ohn text-white font-black py-4 rounded-xl">🛡️ Take Quiz (10 items) to Unlock Next Section</button></div></section>
+
+            <!-- SECTION 5: Legal Bases & Workers' Compensation -->
+            <section id="legal" class="content-section hidden"><div class="bg-white rounded-2xl shadow-lg p-6 md:p-8"><h2 class="text-3xl font-black mb-6 border-b-2 border-ohn pb-3"><i class="fa-solid fa-gavel text-ohn mr-4"></i> Legal Bases & Workers' Compensation (ECC)</h2><div><ul class="list-disc pl-5 space-y-2"><li><span class="reveal-text">PD 626</span> – Employees' Compensation and State Insurance Fund (ECC).</li><li>Compensability: Injury must arise out of and in the course of employment; sickness must be an occupational disease.</li><li>Employer shall require pre‑employment and periodic medical examinations for exposed workers.</li><li><span class="reveal-text">ECC</span> can approve additional occupational diseases.</li><li><span class="reveal-text">Sanitation Code (PD 856) Chapter VII</span> – Industrial Hygiene.</li><li><span class="reveal-text">RA 11058</span> – Occupational Safety and Health Standards (strengthened compliance).</li><li>DOH Occupational Health Program – under NCDPC, Environmental & Occupational Health Office (EOHO).</li></ul><div class="bg-indigo-50 p-3 mt-4 rounded-lg"><p><strong>OHNAP:</strong> Occupational Health Nurses Association of the Philippines, Inc. – founded 1950 as Industrial Nursing Unit.</p></div></div><button onclick="openQuiz('legal')" class="mt-8 w-full bg-ohn text-white font-black py-4 rounded-xl">⚖️ Take Quiz (10 items) to Unlock Next Section</button></div></section>
+
+            <!-- SECTION 6: PHN as Occupational Health Nurse -->
+            <section id="phn_role" class="content-section hidden"><div class="bg-white rounded-2xl shadow-lg p-6 md:p-8"><h2 class="text-3xl font-black mb-6 border-b-2 border-ohn pb-3"><i class="fa-solid fa-user-nurse text-ohn mr-4"></i> Public Health Nurse as Occupational Health Nurse</h2><ul class="list-disc pl-5 space-y-3"><li><strong>Workplace assessment:</strong> Conduct walk‑through surveys to identify hazards.</li><li><strong>Worker health assessment:</strong> Pre‑placement, periodic, return‑to‑work exams; biological monitoring (blood lead, cholinesterase).</li><li><strong>Health education:</strong> Train workers on PPE use, ergonomics, smoking cessation, stress management.</li><li><strong>Surveillance:</strong> Monitor work‑related injuries and illnesses; report to DOLE/ECC.</li><li><strong>Emergency response:</strong> First aid, medical evacuation, disaster preparedness in workplace.</li><li><strong>Case management:</strong> Coordinate workers' compensation, rehabilitation, and return to work.</li><li><strong>Advocacy:</strong> Promote healthy workplace policies, smoking bans, mental health support.</li><li><strong>Coordination:</strong> Link with LGU, DOH, DOLE, and community resources.</li></ul><div class="bg-ohn-light p-3 mt-4 rounded-lg"><p><strong>Multidisciplinary team:</strong> OHN works with safety engineer, industrial hygienist, epidemiologist, ergonomist, occupational physician, and therapist.</p></div><button onclick="openQuiz('phn_role')" class="mt-8 w-full bg-ohn text-white font-black py-4 rounded-xl">🩺 Take Quiz (10 items) to Unlock Mnemonics & Final Exam</button></div></section>
+
+            <!-- MNEMONICS & RECAP -->
+            <section id="mnemonics" class="content-section hidden"><div class="bg-white rounded-2xl shadow-lg p-6 md:p-8"><h2 class="text-3xl font-black mb-6 border-b-2 border-ohn pb-3"><i class="fa-solid fa-brain text-ohn mr-4"></i> Mnemonics & Quick Recap</h2><div class="overflow-x-auto"><table class="w-full border-collapse"><thead class="bg-ohn-dark text-white"><tr><th class="p-2">Topic</th><th class="p-2">Mnemonic / Key</th><th class="p-2">Meaning</th></tr></thead><tbody><tr class="border-b"><td class="p-2">5 hazard categories</td><td class="text-ohn font-black">P‑C‑B‑M‑P</td><td class="reveal-text">Physical, Chemical, Biological, Mechanical/Ergonomic, Psychosocial</td></tr><tr class="bg-slate-50 border-b"><td class="p-2">OHN core functions (10 components)</td><td class="text-ohn font-black">H‑W‑I‑P‑C‑C‑M‑L‑R‑C</td><td class="reveal-text">Health promotion, Workplace assessment, Injury investigation, Primary care, Case management, Counseling, Management/Admin, Legal/ethical, Research, Community orientation</td></tr><tr class="border-b"><td class="p-2">Primary prevention examples</td><td class="text-ohn font-black">V‑E‑T‑P</td><td class="reveal-text">Vaccination, Engineering controls, Training, PPE</td></tr><tr class="bg-slate-50"><td class="p-2">Workers' compensation law</td><td class="text-ohn font-black">PD 626 (ECC)</td><td class="reveal-text">Employees' Compensation and State Insurance Fund</td></tr><tr><td class="p-2">OHNAP history</td><td class="text-ohn font-black">1950 (INU) → 1960 (OHNAP)</td><td class="reveal-text">Industrial Nursing Unit founded by Ms. Magdalena Valenzuela</td></tr></tbody></table></div><button onclick="openQuiz('final_quiz')" class="mt-8 w-full bg-amber-500 text-slate-900 font-black py-4 rounded-xl text-lg">🎓 Take Final 50‑Item Exam</button></div></section>
+
+            <!-- FINAL QUIZ SECTION -->
+            <section id="final_quiz_sec" class="content-section hidden"><div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 text-center min-h-[60vh] flex flex-col justify-center items-center"><i class="fa-solid fa-graduation-cap text-8xl text-amber-400 mb-6"></i><h2 class="text-4xl font-black text-slate-800 mb-4">Occupational Health Nursing Mastery Exam</h2><p class="text-lg text-slate-600 mb-8">50 items covering definitions, functions, hazards, prevention, legal bases, and PHN role. 75% required to pass.</p><button onclick="openQuiz('final_quiz')" class="w-full max-w-md bg-slate-800 text-white font-black py-4 rounded-xl text-xl">Start Final Exam</button></div></section>
+        </div>
+    </main>
+
+    <!-- QUIZ MODAL -->
+    <div id="quiz-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/80 backdrop-blur-sm p-4"><div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl p-6 md:p-8 relative max-h-[90vh] overflow-y-auto"><button onclick="closeQuiz()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-2xl"></i></button><h2 id="quiz-title" class="text-3xl font-black text-slate-800 mb-2"></h2><p class="text-slate-600 mb-6 border-b pb-4">Score ≥75% to unlock next section.</p><div id="quiz-questions-container" class="space-y-4"></div><button id="quiz-submit-btn" onclick="submitQuiz()" class="mt-8 w-full bg-ohn text-white font-bold py-4 rounded-xl">Submit Answers</button><div id="quiz-result-container" class="hidden mt-6 p-4 rounded-xl bg-slate-100 border"></div></div></div>
+
+    <script>
+        let unlockedSections = ['home'];
+        // QUIZ DATA (10 questions each section)
+        const quizzes = {
+            definition: { title: "Definition & Scope of OHN", next: "functions", questions: [
+                { q: "Occupational Health Nursing is defined as:", options: ["Specialty practice delivering health care services to workers", "Hospital-based nursing", "School nursing", "Geriatric nursing"], ans: 0 },
+                { q: "Occupational health nursing focuses on:", options: ["Promotion, protection, and restoration of workers' health", "Only curative care", "Only administrative tasks", "Environmental sanitation only"], ans: 0 },
+                { q: "What percentage of life do workers spend at work?", options: ["1/4 to 1/3", "10%", "50%", "Most of their lives"], ans: 0 },
+                { q: "Occupational health nursing is autonomous and requires:", options: ["Independent decisions and creative solutions", "Strict physician supervision only", "No decision-making", "Only clerical work"], ans: 0 },
+                { q: "Which organization recognizes the significant contribution of nursing to health outcomes?", options: ["WHO", "ILO", "DOLE", "ECC"], ans: 0 },
+                { q: "The practice of OHN integrates principles from:", options: ["Public health theory and principles", "Only business management", "Only law", "Only engineering"], ans: 0 },
+                { q: "The primary goal of occupational health nursing is:", options: ["Safe and healthful working conditions for every worker", "Maximize company profit", "Reduce worker salaries", "Eliminate all workplace hazards"], ans: 0 },
+                { q: "Which of the following is a public health skill used by OHN?", options: ["Community assessment", "Surgery", "Pharmacy", "Radiology"], ans: 0 },
+                { q: "OHNs are accountable to:", options: ["Workers, employers, profession, and self", "Only employers", "Only workers", "Only the government"], ans: 0 },
+                { q: "The OHN's central mission is to:", options: ["Promote and maintain health and safety of workers", "Increase production", "Lower health care costs only", "Replace physicians"], ans: 0 }
+            ]},
+            functions: { title: "Functions of OHN (PD 856)", next: "hazards", questions: [
+                { q: "Under PD 856, the OHN is responsible for:", options: ["Leading sanitary and industrial hygiene inspections", "Designing buildings", "Managing finances", "Legal representation"], ans: 0 },
+                { q: "Which of the following is a function of OHN related to permits?", options: ["Recommend issuance/suspension/revocation of business permits", "Issue driver's licenses", "Collect property taxes", "Grant building permits"], ans: 0 },
+                { q: "The OHN must ensure proper use and maintenance of:", options: ["Personal Protective Equipment (PPE)", "Office furniture", "Company vehicles", "Cafeteria equipment"], ans: 0 },
+                { q: "Periodic health examinations related to worker exposure are conducted by:", options: ["Occupational Health Nurse", "Company lawyer", "Accountant", "Security guard"], ans: 0 },
+                { q: "One of the OHN's duties is to:", options: ["Inform workers about hazards and reasons for control measures", "Hide workplace hazards", "Ignore worker complaints", "Discontinue safety training"], ans: 0 },
+                { q: "The OHN should coordinate with which agencies for implementation of IRR?", options: ["Government agencies", "Only private companies", "Only foreign donors", "Only media"], ans: 0 },
+                { q: "Which of the following is an OHN responsibility regarding control facilities?", options: ["Provide, install, and maintain control facilities and protective barriers", "Remove all safety equipment", "Reduce budget for safety", "Ignore maintenance"], ans: 0 },
+                { q: "The OHN prepares and submits yearly reports to:", options: ["Local and National Government", "Only company CEO", "Only the employees", "Only foreign clients"], ans: 0 },
+                { q: "Which function addresses reduction of noise, dust, and other hazards?", options: ["Implement control measures", "Conduct financial audits", "Hire security personnel", "Manage cafeteria"], ans: 0 },
+                { q: "The OHN attends complaints related to:", options: ["Industrial hygiene", "Employee parking", "Office lighting color", "Cafeteria menu"], ans: 0 }
+            ]},
+            hazards: { title: "Workplace Hazards (5 Categories)", next: "prevention", questions: [
+                { q: "Which hazard includes radiation, noise, and temperature extremes?", options: ["Physical", "Chemical", "Biological", "Ergonomic"], ans: 0 },
+                { q: "Solvents, pesticides, and gases belong to which hazard category?", options: ["Chemical", "Physical", "Biological", "Psychosocial"], ans: 0 },
+                { q: "HIV, TB, and Hepatitis B are examples of:", options: ["Biological hazards", "Physical hazards", "Chemical hazards", "Ergonomic hazards"], ans: 0 },
+                { q: "Carpal tunnel syndrome from repetitive motion is a:", options: ["Mechanical/Ergonomic hazard", "Psychosocial hazard", "Physical hazard", "Chemical hazard"], ans: 0 },
+                { q: "Shift work, interpersonal conflict, and sexual harassment are:", options: ["Psychosocial hazards", "Biological hazards", "Physical hazards", "Chemical hazards"], ans: 0 },
+                { q: "Noise-induced hearing loss is a chronic effect of which hazard?", options: ["Physical", "Chemical", "Biological", "Psychosocial"], ans: 0 },
+                { q: "Contact dermatitis from cleaning agents is an example of:", options: ["Chemical hazard", "Biological hazard", "Ergonomic hazard", "Psychosocial hazard"], ans: 0 },
+                { q: "Which hazard category includes back injury from poor workstation design?", options: ["Mechanical/Ergonomic", "Physical", "Chemical", "Biological"], ans: 0 },
+                { q: "Stress leading to hypertension is a chronic effect of:", options: ["Psychosocial hazard", "Physical hazard", "Chemical hazard", "Biological hazard"], ans: 0 },
+                { q: "The OHN uses the hierarchy of controls to manage hazards. The most effective is:", options: ["Elimination/substitution", "PPE", "Administrative controls", "Training"], ans: 0 }
+            ]},
+            prevention: { title: "Levels of Prevention & Program Components", next: "legal", questions: [
+                { q: "Pre‑employment examinations and health education are examples of:", options: ["Primary prevention", "Secondary prevention", "Tertiary prevention", "Curative care"], ans: 0 },
+                { q: "Screening for lead levels and audiometry are:", options: ["Secondary prevention", "Primary prevention", "Tertiary prevention", "Rehabilitation"], ans: 0 },
+                { q: "Job modification and return‑to‑work programs belong to:", options: ["Tertiary prevention", "Primary prevention", "Secondary prevention", "Health promotion"], ans: 0 },
+                { q: "Which OHN component involves coordinating worker care efficiently?", options: ["Case management", "Surveillance", "Health education", "Research"], ans: 0 },
+                { q: "Workplace hazard assessment and monitoring is part of:", options: ["Surveillance", "Primary care", "Counseling", "Administration"], ans: 0 },
+                { q: "Emergency treatment and follow‑up on‑site is considered:", options: ["Primary care component", "Tertiary prevention", "Case management", "Legal monitoring"], ans: 0 },
+                { q: "Research in OHN aims to:", options: ["Support and expand knowledge for practice", "Increase administrative tasks", "Replace clinical care", "Reduce worker rights"], ans: 0 },
+                { q: "Which component addresses psychosocial hazards and stress?", options: ["Counseling", "Surveillance", "Case management", "Research"], ans: 0 },
+                { q: "Legal/ethical monitoring ensures:", options: ["Compliance with OSH laws and ethical standards", "Only profit maximization", "Ignoring worker rights", "Elimination of safety programs"], ans: 0 },
+                { q: "Community orientation in OHN involves:", options: ["Articulation with community resources", "Isolation from the community", "Only workplace activities", "Ignoring family needs"], ans: 0 }
+            ]},
+            legal: { title: "Legal Bases & Workers' Compensation", next: "phn_role", questions: [
+                { q: "The law that created the Employees' Compensation Commission is:", options: ["PD 626", "RA 7160", "RA 11223", "PD 856"], ans: 0 },
+                { q: "For a sickness to be compensable, it must be:", options: ["An occupational disease", "Any illness", "Only infectious disease", "Only mental illness"], ans: 0 },
+                { q: "Employers shall require which type of examination for prospective employees?", options: ["Pre‑employment examination", "Only annual exam", "No exam", "Post-employment exam"], ans: 0 },
+                { q: "The Sanitation Code chapter on Industrial Hygiene is:", options: ["PD 856, Chapter VII", "RA 7160", "EO 102", "RA 11058"], ans: 0 },
+                { q: "The DOH Occupational Health Program is under:", options: ["NCDPC - Environmental & Occupational Health Office (EOHO)", "Family Health Office", "Health Facilities Office", "Bureau of Quarantine"], ans: 0 },
+                { q: "OHNAP stands for:", options: ["Occupational Health Nurses Association of the Philippines", "Occupational Health Nursing Accreditation Program", "Organization of Health Nurses for Asia Pacific", "Office of Health Nursing and Practice"], ans: 0 },
+                { q: "OHNAP was originally founded as:", options: ["Industrial Nursing Unit (INU) in 1950", "Philippine Nurses Association in 1922", "Department of Health in 1898", "Employees' Compensation Commission in 1975"], ans: 0 },
+                { q: "The ECC can:", options: ["Determine and approve additional occupational diseases", "Only process claims", "Only collect fees", "Only reject claims"], ans: 0 },
+                { q: "Which law strengthened occupational safety and health standards in the Philippines?", options: ["RA 11058", "RA 7160", "RA 9173", "RA 7875"], ans: 0 },
+                { q: "The DOH program strategy includes:", options: ["Healthy Workplace Initiative", "Only enforcement", "Only vaccination", "Only research"], ans: 0 }
+            ]},
+            phn_role: { title: "PHN as Occupational Health Nurse", next: "mnemonics", questions: [
+                { q: "When a PHN acts as an OHN, she performs:", options: ["Workplace walk‑through surveys and hazard identification", "Only clinic nursing", "Only hospital rounds", "Only office administration"], ans: 0 },
+                { q: "Pre‑placement and periodic examinations are part of:", options: ["Worker health assessment", "Emergency response", "Case management", "Legal monitoring"], ans: 0 },
+                { q: "The OHN coordinates workers' compensation and rehabilitation under:", options: ["Case management", "Health education", "Surveillance", "Primary care"], ans: 0 },
+                { q: "Which OHN activity involves teaching PPE use and ergonomics?", options: ["Health education", "Research", "Legal monitoring", "Administration"], ans: 0 },
+                { q: "The OHN works collaboratively with which professionals?", options: ["Safety engineer, industrial hygienist, ergonomist", "Only physicians", "Only lawyers", "Only accountants"], ans: 0 },
+                { q: "In BARMM or remote workplaces, the PHN should prioritize:", options: ["Emergency response and first aid", "Only administrative tasks", "Only financial reports", "Only legal paperwork"], ans: 0 },
+                { q: "Biological monitoring (e.g., blood lead, RBC cholinesterase) is part of:", options: ["Worker assessment and surveillance", "Primary prevention", "Health promotion", "Administration"], ans: 0 },
+                { q: "The OHN advocates for:", options: ["Healthy workplace policies (smoking ban, mental health support)", "Reduction of safety measures", "Increased worker hours", "Elimination of breaks"], ans: 0 },
+                { q: "A PHN who notices unusually frequent wrist pain among data encoders should:", options: ["Investigate ergonomics and recommend adjustments", "Ignore it", "Blame the workers", "Terminate employment"], ans: 0 },
+                { q: "The OHN reports work‑related injuries and illnesses to:", options: ["DOLE and ECC", "Only the employer", "Only the police", "Only the media"], ans: 0 }
+            ]}
+        };
+
+        // Build final 50-question exam (mix from all sections)
+        let finalQs = [];
+        for(let sec of ['definition','functions','hazards','prevention','legal','phn_role']) {
+            finalQs = finalQs.concat(quizzes[sec].questions.slice(0,9));
+        }
+        while(finalQs.length < 50) finalQs.push(quizzes['definition'].questions[0]);
+        quizzes['final_quiz'] = { title: "Final 50-Item Exam: Occupational Health and Safety Nursing", next: null, questions: finalQs };
+
+        function unlockFirstSection() { if(!unlockedSections.includes('definition')) { unlockedSections.push('definition'); updateSidebarUI(); } showSection('definition'); }
+        function showSection(id) { if(!unlockedSections.includes(id) && id !== 'home') { alert("Complete the quiz at the bottom of the previous section to unlock."); return; } document.querySelectorAll('.content-section').forEach(el=>el.classList.add('hidden')); document.getElementById(id)?.classList.remove('hidden'); document.querySelectorAll('.nav-btn').forEach(btn=>{btn.classList.remove('bg-ohn-light','text-ohn-dark','border-r-4','border-ohn-dark'); btn.classList.add('text-slate-600');}); let active=document.getElementById('btn-'+id); if(active){active.classList.remove('text-slate-600');active.classList.add('bg-ohn-light','text-ohn-dark','border-r-4','border-ohn-dark');} if(window.innerWidth<768)document.getElementById('sidebar').classList.add('hidden'); document.querySelector('main').scrollTop=0; }
+        function updateSidebarUI(){['home','definition','functions','hazards','prevention','legal','phn_role','mnemonics','final_quiz_sec'].forEach(sec=>{let btn=document.getElementById('btn-'+sec);if(!btn)return;let lock=btn.querySelector('.fa-lock'),icon=btn.querySelector('.nav-icon');if(unlockedSections.includes(sec)||sec==='home'){btn.classList.remove('locked-section');if(lock)lock.classList.add('hidden');if(icon)icon.classList.remove('hidden');}else{btn.classList.add('locked-section');if(lock)lock.classList.remove('hidden');if(icon)icon.classList.add('hidden');}});}
+        let currentQuiz = null;
+        function openQuiz(sectionId) { currentQuiz=sectionId; let qd=quizzes[sectionId]; document.getElementById('quiz-title').innerText=qd.title; let container=document.getElementById('quiz-questions-container'); container.innerHTML=''; qd.questions.forEach((q,idx)=>{let html=`<div class="bg-slate-50 p-4 rounded-xl mb-4"><p class="font-bold mb-3">${idx+1}. ${q.q}</p><div class="space-y-2">`; q.options.forEach((opt,oi)=>{html+=`<label class="flex items-center space-x-3 p-2 hover:bg-white cursor-pointer"><input type="radio" name="q${idx}" value="${oi}" class="form-radio text-ohn"><span>${opt}</span></label>`;}); html+=`</div><div class="feedback-${idx} text-sm mt-2 hidden"></div></div>`; container.innerHTML+=html;}); document.getElementById('quiz-submit-btn').classList.remove('hidden'); document.getElementById('quiz-result-container').classList.add('hidden'); document.getElementById('quiz-modal').classList.remove('hidden'); }
+        function closeQuiz() { document.getElementById('quiz-modal').classList.add('hidden'); }
+        function submitQuiz() { let qd=quizzes[currentQuiz]; let score=0; for(let i=0;i<qd.questions.length;i++){ let selected=document.querySelector(`input[name="q${i}"]:checked`); let correct=(selected&&parseInt(selected.value)===qd.questions[i].ans); if(correct) score++; let fbDiv=document.querySelector(`.feedback-${i}`); if(fbDiv){ let correctAns=qd.questions[i].options[qd.questions[i].ans]; if(correct){fbDiv.innerHTML='✔ Correct!';fbDiv.parentElement?.classList.add('quiz-feedback-correct');}else{let selectedText=selected?qd.questions[i].options[parseInt(selected.value)]:"No answer";fbDiv.innerHTML=`✘ Incorrect. Correct: ${correctAns}`;fbDiv.parentElement?.classList.add('quiz-feedback-wrong');}fbDiv.classList.remove('hidden');}} let percent=(score/qd.questions.length)*100; let btn=document.getElementById('quiz-submit-btn'); let resultDiv=document.getElementById('quiz-result-container'); btn.classList.add('hidden'); resultDiv.classList.remove('hidden'); if(percent>=75){ if(currentQuiz==='final_quiz'){ resultDiv.innerHTML=`<div class="text-amber-500 text-5xl text-center">🏆</div><h3 class="text-2xl font-black text-center">Excellent!</h3><p class="text-center">Score ${score}/${qd.questions.length} (${percent}%)</p><button onclick="closeQuiz()" class="mt-4 w-full bg-slate-800 text-white py-2 rounded-lg">Close</button>`; return; } if(qd.next && !unlockedSections.includes(qd.next)){ unlockedSections.push(qd.next); if(qd.next==='mnemonics') unlockedSections.push('final_quiz_sec'); updateSidebarUI(); } resultDiv.innerHTML=`<div class="text-green-600 text-5xl text-center">✓</div><h3 class="text-2xl font-black text-center">Passed!</h3><p class="text-center">Score ${score}/${qd.questions.length} (${percent}%)</p><button onclick="closeQuiz(); showSection('${qd.next}')" class="mt-4 w-full bg-green-600 text-white py-2 rounded-lg">Unlock Next Section</button>`; } else { resultDiv.innerHTML=`<div class="text-red-500 text-5xl text-center">✗</div><h3 class="text-2xl font-black text-center">Failed (Need 75%)</h3><p class="text-center">Score ${score}/${qd.questions.length} (${percent}%)</p><button onclick="openQuiz('${currentQuiz}')" class="mt-4 w-full bg-slate-600 text-white py-2 rounded-lg">Try Again</button>`; } }
+        function toggleRecallMode(){ let active=!document.body.classList.contains('recall-mode'); let toggle=document.getElementById('recall-toggle'),knob=document.getElementById('recall-knob'); if(active){document.body.classList.add('recall-mode');toggle.classList.add('bg-ohn-dark');knob.classList.add('translate-x-6');}else{document.body.classList.remove('recall-mode');toggle.classList.remove('bg-ohn-dark');knob.classList.remove('translate-x-6');} }
+        function toggleMobileMenu(){ let s=document.getElementById('sidebar'); if(s.classList.contains('hidden')) s.classList.remove('hidden'); else s.classList.add('hidden'); }
+        document.addEventListener('DOMContentLoaded',()=>{ updateSidebarUI(); document.querySelectorAll('.reveal-text').forEach(el=>el.addEventListener('click',function(){if(document.body.classList.contains('recall-mode'))this.classList.toggle('revealed');})); });
+    </script>
+</body>
+</html>
